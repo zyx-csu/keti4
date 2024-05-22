@@ -1,0 +1,75 @@
+language: cn
+model_unique_abbr: aStar
+version: 1.0
+identification:
+  docker_image_name: astar:1.0
+  model_name: 基于aStar算法的路径规划
+  semantic: path planning based on aStar algorithm
+  description: 基于aStar算法进行路径规划，为道路网络中的点寻找最短路径
+  category_application: 处方型
+  category_data:
+  - 矢量线数据
+  keywords:
+  - 最短路径
+  - 路径规划
+parameter_info:
+  parameters:
+  - arg_name: networkFile
+    is_single_en_dash: false
+    param_type: input_data
+    name: 道路网络数据
+    description: 城市道路网络数据，数据中需包含所有路网边的起点和终点信息
+    data_type: csv
+    data_semantic: network_data
+  - arg_name: originNodeId
+    is_single_en_dash: false
+    param_type: param
+    name: 路径规划的起点
+    description: 路径规划的起点在道路网络中的ID
+    data_type: int
+    data_semantic: the starting point of path planning
+    specification:
+      default: 0
+      range:
+        - "(0,)"
+  - arg_name: destinationNodeId
+    is_single_en_dash: false
+    param_type: param
+    name: 路径规划的终点
+    description: 路径规划的终点在道路网络中的ID
+    data_type: int
+    data_semantic: the ending point of path planning
+    specification:
+      default: 0
+      range:
+        - "(0,)"
+
+application:
+  domain: 路径规划
+  objective: 为道路网络中的点寻找最短路径，从而实现路径规划
+  dimension:
+  - 二维
+  mechanism: 使用启发式搜索解决有权图的单源最短路径问题
+operation:
+  usage: 该算法需要三个参数，道路网络矢量数据(network_data)，起点ID(originNodeId)，终点ID(destinationNodeId)。
+  exec_example:
+  - docker run -v $(pwd):/data astar:1.0 --networkFile /data/xiamenNetworkLink2.csv --originNodeId 398 --destinationNodeId 667
+  output_display:
+  - 起点和终点的最短路径距离
+  - 从起点出发，抵达终点所途经的路网边
+  - 从起点出发，抵达终点所途径的路网节点
+technique:
+  language:
+  - Java
+  os:
+  - Linux
+  - Windows
+  dependencies:
+  - name: argparse4j
+    version: 0.9.0
+source:
+  maintainer: Huanghuihuang && Zhongyuxiang
+  organization: Wuhan University
+  contact: 9027575@qq.com
+  references:
+  - "Hart P E, Nilsson N J, Raphael B. A formal basis for the heuristic determination of minimum cost paths[J]. IEEE transactions on Systems Science and Cybernetics, 1968, 4(2): 100-107."
